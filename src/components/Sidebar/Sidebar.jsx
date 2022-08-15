@@ -6,12 +6,10 @@ import { modalCreateContext } from '../Authenticated/Authenticated';
 import { getGroups } from '../../services/firebase';
 import { Link } from 'react-router-dom';
 
-
 const Sidebar = () => {
    const { user } = useContext(AuthContext)
    const { handleCreateModal } = useContext(modalCreateContext)   
    const [groups, setGroups] = useState();
-
    useEffect(() => {
       getGroups(setGroups);
       
@@ -39,11 +37,10 @@ const Sidebar = () => {
             <Divider/>
                {
                   groups ? groups.map((group, index) => {
-
                      let recentMessage = group.recentMessage ? group.recentMessage.displayName + ": " + group.recentMessage.messageText  : 'Say hi !'; 
                      return (
                         <React.Fragment>
-                           <Link to={"/room/" + group.messagesId}>
+                           <Link to={"/room/" + group.id}>
                               <ListItem key={index}>
                                     <ListItemAvatar>
                                        <Avatar></Avatar>

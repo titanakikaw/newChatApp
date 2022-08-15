@@ -1,5 +1,5 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-import { addDoc, collection, getFirestore, onSnapshot, serverTimestamp, query, orderBy, doc, setDoc } from 'firebase/firestore'
+import { addDoc, collection, getFirestore, onSnapshot, serverTimestamp, query, orderBy} from 'firebase/firestore'
 import { initializeApp } from 'firebase/app'
 
 const firebaseConfig = {
@@ -27,7 +27,6 @@ async function loginWithGoogle() {
    }
 }
 
-
 async function createGroup(){
    try {
       const docRef = await addDoc(collection(db, 'groups'), {
@@ -39,44 +38,61 @@ async function createGroup(){
          },
          messageId : '223456'
       })
-      .then((docRef) => {
-         sendMessage(docRef.id)
-      })
+      // .then((docRef) => {
+      //    sendMessage(docRef.id)
+      // })
    } catch (error) {
       console.log(error)
    }
 }
 
+async function sendMessage(groupId, data){
 
-async function sendMessage(id, data){
    try{
-      await addDoc(collection(db, 'messages', id, 'messages'), data)
+      await addDoc(collection(db, 'messages', groupId, 'message'), data)
    }catch(error){
       console.log(error)
    }
 }
 
-
-
+async function getMessages(roomId, callback){
+   return onSnapshot(
+      query(
+         collection(db, 'messages', roomId, 'message'),
+         orderBy('sentAt', 'asc')
+      ),
+      (querySnapshot) => {
+         const message = querySnapshot.docs.map((msg) =>({
+            id : msg.id,
+            ...msg.data()
+         }))
+         callback(message)
+      }
+   )
+}
 
 async function getGroups(callback){
    return  onSnapshot(
       query(
          collection(db, 'groups'),
-         orderBy('lastUpdate', 'asc')
+         orderBy('lastUpdate', 'desc')
       ),
       (querySnapshot) => {
          const groups = querySnapshot.docs.map((doc) => ({
             id : doc.id,
             ...doc.data()
          }))
-
          callback(groups)
       }
    )
 }
 
-export { loginWithGoogle, getGroups,  createGroup, sendMessage }
+async function getChat(rooomid){
+
+}
+
+
+export { loginWithGoogle, getGroups,  createGroup, sendMessage, getMessages }
 
 
 

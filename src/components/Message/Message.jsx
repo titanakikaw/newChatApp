@@ -1,18 +1,53 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Box, ListItem, ListItemAvatar, Avatar, Typography, ListItemText  } from '@mui/material'
-import { useParams } from 'react-router-dom'
-const Message = () => {
-   let { roomId } = useParams();
-   
-   return (
-         <ListItem sx={{width: '450px'}}>
+import { AuthContext } from '../../context/auth'
+
+
+const Message = ({ msgDetail }) => {
+   const { user } = useContext(AuthContext)
+
+   console.log(user.user.photoURL)
+    
+   if(msgDetail.sentBy == user.user.displayName){
+      return (
+         <ListItem sx={{maxWidth: '100%'}}>
+            <ListItemText  
+               primary={
+                  <Typography sx={{fontSize:'8px'}}>
+                     { msgDetail.sentBy }
+                  </Typography>
+               }
+               secondary={
+                  <Typography sx={{
+                     backgroundColor:'#1976d2', 
+                     width:'fit-content', 
+                     padding: '5px 10px', 
+                     borderRadius: '10px', 
+                     color:'white',
+                     float:'right'
+                  }}>
+                  { msgDetail.text }
+                  </Typography>
+               }
+               sx={{ textAlign:'right', paddingRight:'10px' }}
+            />
             <ListItemAvatar>
-               <Avatar></Avatar>
+               <Avatar src={user.user.photoURL}/>
+            </ListItemAvatar>
+            
+         </ListItem>
+      )
+   }
+   else{
+      return (
+         <ListItem sx={{maxWidth: '50%'}}>
+            <ListItemAvatar>
+               <Avatar />
             </ListItemAvatar>
             <ListItemText  
                primary={
                   <Typography sx={{fontSize:'8px'}}>
-                     Marvin
+                     { msgDetail.sentBy }
                   </Typography>
                }
                secondary={
@@ -23,13 +58,16 @@ const Message = () => {
                      borderRadius: '10px', 
                      color:'white'
                   }}>
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                  { msgDetail.text }
                   </Typography>
                }
             />
+            
          </ListItem>
-      
-   )
+      )
+   }
+   
+   
 }
 
 export default Message
