@@ -22,10 +22,7 @@ const Sidebar = () => {
          }}
       >
          <Box sx={{padding: '10px', display:'flex', justifyContent:'space-between'}}>
-            <Button>
-               <Settings/>
-            </Button>
-            <Typography variant='h5'>Messenger</Typography>
+            <Typography variant='h6'>Conversation</Typography>
             <Button>
                <CreateIcon onClick={handleCreateModal}/>
             </Button>
@@ -39,7 +36,7 @@ const Sidebar = () => {
                   groups ? groups.map((group, index) => {
                      let recentMessage = group.recentMessage ? group.recentMessage.displayName + ": " + group.recentMessage.messageText  : 'Say hi !'; 
                      return (
-                        <React.Fragment>
+                        <React.Fragment key={index}>
                            <Link to={"/room/" + group.id}>
                               <ListItem key={index}>
                                     <ListItemAvatar>

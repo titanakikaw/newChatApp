@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Modal, Box, Typography, TextField, Button } from '@mui/material'
 import { modalCreateContext } from '../../Authenticated/Authenticated';
 import { createGroup } from '../../../services/firebase';
@@ -17,7 +17,13 @@ const style = {
 };
 
 const Index = () => {
-   const { open, handleCreateModal } = useContext(modalCreateContext)
+   const { open, handleCreateModal, handleCloseModal } = useContext(modalCreateContext)
+   const [name, setName] = useState();
+
+   const handleChange = (e) => {
+      setName(e.target.value)
+   }
+
    return (
          <React.Fragment>
             <Modal
@@ -25,16 +31,18 @@ const Index = () => {
                aria-describedby="modal-modal-description"
                open={open}
                onClose={handleCreateModal}
+               
             >
                <Box sx={style}>
                   <Typography id="modal-modal-title" variant="h6" >
                      Create New Group
                   </Typography>
                   <div className='input-create' style={{margin:'10px 0'}}>
-                     <TextField label="Group Name" sx={{width:'100%'}}/>
+                     <input type="text" className="modalTextField" style={{padding:'10px', width:'100%'}} onChange={(e) => handleChange(e)} />
                   </div>
                   <div className='input-create'>
-                     <Button variant="contained" onClick={createGroup}>Create</Button>
+                     <Button variant="contained" onClick={() => createGroup(name)}>Create</Button>
+                     <Button variant="contained" onClick={() => handleCloseModal(name)}>Cancel</Button>
                   </div>
                </Box>
             </Modal> 

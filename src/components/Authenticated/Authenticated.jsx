@@ -11,13 +11,18 @@ function Authenticated() {
   const [openCreate, setOpenCreate] = useState(false);
  
   const handleCreateModal = () => {
-    setOpenCreate(!openCreate)
+    setOpenCreate(true)
+  }
+
+  const handleCloseModal = () => {
+    setOpenCreate(false)
   }
 
   return (
     <modalCreateContext.Provider value={{
       open : openCreate,
-      handleCreateModal: handleCreateModal
+      handleCreateModal: handleCreateModal,
+      handleCloseModal : handleCloseModal
     }}>
       <Box sx={{ display: 'flex' }}>
         <Box>

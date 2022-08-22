@@ -1,6 +1,6 @@
 import React, { createContext, useState } from "react";
 
-import { loginWithGoogle } from "../services/firebase";
+import { loginWithGoogle, signInWithCredentials } from "../services/firebase";
 
 const AuthContext = createContext();
 
@@ -16,8 +16,19 @@ const AuthProvider = (props) => {
       setUser(user)
    }
 
-   const value = { user, login }
+   const loginWithCredentials = async (credentials) => {
 
+      const email = credentials.email
+      const password = credentials.pass
+
+      const user = await signInWithCredentials(email,password);
+      if(!user){
+         console.log("Failed to login")
+      }
+      setUser(user)
+   }
+   
+   const value = { user, login, loginWithCredentials }
    return <AuthContext.Provider value={value} {...props}></AuthContext.Provider>
 
 }

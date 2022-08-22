@@ -1,4 +1,4 @@
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { addDoc, collection, getFirestore, onSnapshot, serverTimestamp, query, orderBy} from 'firebase/firestore'
 import { initializeApp } from 'firebase/app'
 
@@ -27,20 +27,17 @@ async function loginWithGoogle() {
    }
 }
 
-async function createGroup(){
+async function createGroup(groupName){
    try {
       const docRef = await addDoc(collection(db, 'groups'), {
          createAt : serverTimestamp(),
          lastUpdate : serverTimestamp(),
-         name : "samples",
+         name : groupName,
          member : {
             0 : "tn9UpCBae5ZnisVlLcWsEE3pDxD2"        
          },
          messageId : '223456'
       })
-      // .then((docRef) => {
-      //    sendMessage(docRef.id)
-      // })
    } catch (error) {
       console.log(error)
    }
@@ -87,12 +84,37 @@ async function getGroups(callback){
    )
 }
 
-async function getChat(rooomid){
+async function createUser(email, password){
+   try {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+         const user = userCredentials;
+
+      })
+      .catch((error) => {
+         const errorCode = error.code;
+         const errorMessage = error.message;
+      })
+
+   } catch (error) {
+      console.log(error)
+   }
+}
+
+async function signInWithCredentials(email, password){
+   try {
+      const auth = getAuth();
+      const { user } = await signInWithEmailAndPassword(auth, email, password)
+      return user
+   } catch (error) {
+      console.log(error)
+   }
 
 }
 
 
-export { loginWithGoogle, getGroups,  createGroup, sendMessage, getMessages }
+export { loginWithGoogle, getGroups,  createGroup, sendMessage, getMessages, createUser, signInWithCredentials }
 
 
 

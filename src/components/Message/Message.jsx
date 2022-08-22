@@ -5,9 +5,6 @@ import { AuthContext } from '../../context/auth'
 
 const Message = ({ msgDetail }) => {
    const { user } = useContext(AuthContext)
-
-   console.log(user.user.photoURL)
-    
    if(msgDetail.sentBy == user.user.displayName){
       return (
          <ListItem sx={{maxWidth: '100%'}}>
@@ -42,7 +39,7 @@ const Message = ({ msgDetail }) => {
       return (
          <ListItem sx={{maxWidth: '50%'}}>
             <ListItemAvatar>
-               <Avatar />
+               <Avatar src={user.user.photoURL}/>
             </ListItemAvatar>
             <ListItemText  
                primary={
@@ -52,20 +49,20 @@ const Message = ({ msgDetail }) => {
                }
                secondary={
                   <Typography sx={{
-                     backgroundColor:'#1976d2', 
+                     backgroundColor:'white', 
                      width:'fit-content', 
                      padding: '5px 10px', 
                      borderRadius: '10px', 
-                     color:'white'
+                     color:'black'
                   }}>
                   { msgDetail.text }
                   </Typography>
                }
-            />
-            
+            />     
          </ListItem>
       )
-   }
+   } 
+    
    
    
 }

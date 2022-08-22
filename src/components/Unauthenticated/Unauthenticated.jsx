@@ -1,22 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, TextField, Button, Typography } from '@mui/material'
 import { useAuth } from '../../hooks/useAuth'
+import { signInWithCredentials } from '../../services/firebase'
 
 
 function Unauthenticated() {
-  const { login } = useAuth();
+  const { login, loginWithCredentials } = useAuth();
+  const [ credentials, setCredentials ] = useState({
+    email : '',
+    pass : ''
+  });
+ 
+  const setEmail = (email) => {
+    setCredentials({...credentials, email : email })
+  }
+  const setPassword = (password) => {
+    setCredentials({...credentials, pass : password })
+  }
+
+  const handleSignin = () => {
+    loginWithCredentials(credentials)
+  }
   return (
     <Box 
       sx={{
         margin:'5rem auto',
         padding: '10px 1rem',
         width: '250px',
-        boxShadow: '5px 7px 10px -5px rgba(0,0,0,.33);',
-        borderRadius:'3px'
+       
       }}
     >
-
-      <Typography variant='h5' sx={{textAlign:'center', fontWeight:'bold'}}>GMessage</Typography>
       <div className='input-fields' style={inputField}>
         <TextField 
           id="outlined-basic" 
@@ -26,6 +39,8 @@ function Unauthenticated() {
           sx={{
             width:'100%'
           }}
+          onChange = {(e) => setEmail(e.target.value)}
+          value = {credentials.email}
         />
       </div>
       <div className='input-fields' style={inputField}>
@@ -38,6 +53,9 @@ function Unauthenticated() {
           style={{
             width:'100%'
           }}
+          
+          onChange={(e) => setPassword(e.target.value)}
+          value = {credentials.pass}
         />
       </div>
 
@@ -49,6 +67,7 @@ function Unauthenticated() {
         sx={{
           margin:'5px 0'
         }}
+        onClick= {() => handleSignin()}
       >
         <Typography
           variant="caption"
@@ -63,6 +82,16 @@ function Unauthenticated() {
         onClick={() => login()}
       >
         Sign in With Google
+      </Button>
+      <Button 
+        variant="contained" 
+        fullWidth="true" 
+        size='small'
+        sx={{
+          margin:'5px 0'
+        }}
+      >
+        Register
       </Button>
     </Box>
   )
