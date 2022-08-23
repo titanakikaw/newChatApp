@@ -27,11 +27,7 @@ const Message = ({ msgDetail }) => {
                   </Typography>
                }
                sx={{ textAlign:'right', paddingRight:'10px' }}
-            />
-            <ListItemAvatar>
-               <Avatar src={user.user.photoURL}/>
-            </ListItemAvatar>
-            
+            />            
          </ListItem>
       )
    }

@@ -31,7 +31,6 @@ const Index = () => {
                aria-describedby="modal-modal-description"
                open={open}
                onClose={handleCreateModal}
-               
             >
                <Box sx={style}>
                   <Typography id="modal-modal-title" variant="h6" >

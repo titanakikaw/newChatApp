@@ -9,20 +9,29 @@ export const modalCreateContext = createContext()
 
 function Authenticated() {
   const [openCreate, setOpenCreate] = useState(false);
+  const [openAddMember, setOpenAddMember] = useState(false);
  
   const handleCreateModal = () => {
     setOpenCreate(true)
   }
-
   const handleCloseModal = () => {
     setOpenCreate(false)
+  }
+  const handleOpenMember = () => {
+    setOpenAddMember(true)
+  }
+  const handleCloseMember = () => {
+    setOpenAddMember(false)
   }
 
   return (
     <modalCreateContext.Provider value={{
       open : openCreate,
+      openAddMem  : openAddMember,
       handleCreateModal: handleCreateModal,
-      handleCloseModal : handleCloseModal
+      handleCloseModal : handleCloseModal,
+      handleOpenMember : handleOpenMember,
+      handleCloseMember : handleCloseMember
     }}>
       <Box sx={{ display: 'flex' }}>
         <Box>

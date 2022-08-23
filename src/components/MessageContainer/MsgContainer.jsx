@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { AppBar,Toolbar,Typography, Box, Divider,List, Grid, ListItem, ListItemButton, ListItemText, Avatar, Container, ListItemAvatar } from '@mui/material'
+import React, { useContext, useEffect, useState } from 'react'
+import { AppBar,Toolbar,Typography, Box, Divider,List, Grid, ListItem, ListItemButton, ListItemText, Avatar, Container, ListItemAvatar,Button } from '@mui/material'
 import MsgInput from '../MessageInput/MsgInput'
 import Message from '../Message/Message'
-import MessageInfo from '../MessageInfo'
-
+import AddIcon from '@mui/icons-material/Add';
+import AddMemberModal from '../Modals/AddMember'
+import { modalCreateContext } from '../Authenticated/Authenticated'
 import { useParams } from 'react-router-dom'
 import { getMessages } from '../../services/firebase'
 
 
 const MsgContainer = () => {
   const { roomId } = useParams()
+  const { handleOpenMember } = useContext(modalCreateContext)
   const [messages, setMessages ] = useState();
   const [members, setMembers] = useState();
 
@@ -42,8 +44,9 @@ const MsgContainer = () => {
         </Grid>
         <Grid item md={3.5}>
           <Container sx={{padding: '8px 0'}}>
-            <Box>
-                <Typography variant='h6' >Members</Typography>
+            <Box sx={{display:'flex', justifyContent: 'space-between', alignItems:'center'}}>
+                <Typography variant='subtitle1' gutterBottom fontWeight={'bold'} margin={'0px'} lineHeight={'0px'}>Members</Typography>
+                <Button onClick={(e) => handleOpenMember()}><AddIcon /></Button>
             </Box>
             <hr/>
             <List sx={{padding: '0px'}}>
@@ -78,6 +81,7 @@ const MsgContainer = () => {
           </Container>
         </Grid> 
       </Grid>
+      <AddMemberModal/>
     </Box>
   )
 }
