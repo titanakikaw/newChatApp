@@ -11,14 +11,14 @@ const Sidebar = () => {
    const { handleCreateModal } = useContext(modalCreateContext)   
    const [groups, setGroups] = useState();
    useEffect(() => {
-      getGroups(setGroups);
+      getGroups( user.uid ,setGroups);
       
    }, [])
    return (
       <Drawer
          variant="permanent"
          PaperProps={{
-            sx: { width: "300px", padding: '0', position: 'sticky' },
+            sx: { width: "300px", padding: '0', position: 'sticky', height:'100vh' },
          }}
       >
          <Box sx={{padding: '10px', display:'flex', justifyContent:'space-between'}}>

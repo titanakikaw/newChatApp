@@ -20,10 +20,8 @@ const Index = () => {
   const [currentMember, setCurrentMember] = useState();
   const [addMember, setAddMember ]  = useState();
 
-  const handlePressEnter = (e) =>{
-    if(e.key == 'Enter'){
-      console.log(e.target.value)
-    }
+  const handleSelectPerson = (person) =>{
+    setAddMember(person)
   }
 
   return (
@@ -41,33 +39,30 @@ const Index = () => {
         <Box>
           <Autocomplete
             size='small'
-            freeSolo
-            id="free-solo-2-demo"
-            disableClearable
-            options={top100Films.map((option) => option.title)}
-            onChange={(params) => (console.log(params.target.outerText))}
+            id="tags-standard"
+            multiple
+            options={top100Films}
+            onChange={(event, newValue) => {
+              console.log(newValue)
+            }}
+            isOptionEqualToValue= {(option, value) => option.value === value.value}
+            getOptionLabel = { (option) => {
+              if(option.title){
+                return option.title
+              }
+            }}
             sx={{p:0, margin: 0}}
             renderInput={(params) => (
               <TextField
                 {...params}
                 label="Search input"
-                InputProps={{
-                  ...params.InputProps,
-                  type: 'search',
-                }}
               />
             )}
           />
         </Box>
         <hr/>
-        <Grid container spacing={2}>
-          <Grid xs={3} item style={{ display:'flex', alignItems:'center' }}>
-              <Avatar sx={{ width: 24, height: 24, fontSize:8, marginRight:1 }}>N</Avatar>
-              <Typography fontSize={10} textTransform={"capitalize"} >Tesing asd</Typography>
-          </Grid>
-        </Grid>
-        <hr/>
         <Button variant="contained">Add Members</Button>
+        <Button variant="contained" color="error" sx={{marginLeft:'10px'}} onClick={() => handleCloseMember(false)}>Cancel</Button>
       </Box>
     </Modal>
   )

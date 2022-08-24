@@ -1,11 +1,22 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Box, ListItem, ListItemAvatar, Avatar, Typography, ListItemText  } from '@mui/material'
 import { AuthContext } from '../../context/auth'
 
 
 const Message = ({ msgDetail }) => {
-   const { user } = useContext(AuthContext)
-   if(msgDetail.sentBy == user.user.displayName){
+   const { users } = useContext(AuthContext);
+   const { user } = useContext(AuthContext);
+   const [data, setData] = useState();
+   useEffect(() => {
+      users.map((user1) => {
+         if(msgDetail.sentBy === user1.displayName){
+            setData(user1)
+         }
+      })
+   },[])
+
+   
+   if(msgDetail.sentBy == user.displayName){
       return (
          <ListItem sx={{maxWidth: '100%'}}>
             <ListItemText  
@@ -35,7 +46,7 @@ const Message = ({ msgDetail }) => {
       return (
          <ListItem sx={{maxWidth: '50%'}}>
             <ListItemAvatar>
-               <Avatar src={user.user.photoURL}/>
+               <Avatar src={ data ? data.photoUrl : ''} />
             </ListItemAvatar>
             <ListItemText  
                primary={
@@ -56,11 +67,9 @@ const Message = ({ msgDetail }) => {
                }
             />     
          </ListItem>
-      )
+      )   
    } 
     
-   
-   
 }
 
 export default Message

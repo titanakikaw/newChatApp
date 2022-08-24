@@ -6,19 +6,18 @@ import AddIcon from '@mui/icons-material/Add';
 import AddMemberModal from '../Modals/AddMember'
 import { modalCreateContext } from '../Authenticated/Authenticated'
 import { useParams } from 'react-router-dom'
-import { getMessages } from '../../services/firebase'
+import { getMessages, getRoom } from '../../services/firebase'
 
 
 const MsgContainer = () => {
   const { roomId } = useParams()
-  const { handleOpenMember } = useContext(modalCreateContext)
-  const [messages, setMessages ] = useState();
-  const [members, setMembers] = useState();
-
+  const [ messages, setMessages ] = useState();
+  const [ roomDetails, setRoomDetails] = useState();
   useEffect(() => {
     getMessages(roomId, setMessages)
+    getRoom(roomId, setRoomDetails)
   }, [roomId])
-
+  console.log(roomDetails ? roomDetails : '')
   return (
     <Box component="main" style={{width: '100%', overflowY:'hidden'}}>
       <Grid container>
@@ -43,48 +42,39 @@ const MsgContainer = () => {
           </Container>
         </Grid>
         <Grid item md={3.5}>
-          <Container sx={{padding: '8px 0'}}>
-            <Box sx={{display:'flex', justifyContent: 'space-between', alignItems:'center'}}>
-                <Typography variant='subtitle1' gutterBottom fontWeight={'bold'} margin={'0px'} lineHeight={'0px'}>Members</Typography>
-                <Button onClick={(e) => handleOpenMember()}><AddIcon /></Button>
-            </Box>
-            <hr/>
-            <List sx={{padding: '0px'}}>
-              <ListItem sx={{padding:'0px', textAlign:'center', margin: '5px 0'}}>
-                <ListItemAvatar>
-                    <Avatar></Avatar>
-                </ListItemAvatar>
-                <ListItemText>
-                  <Typography variant='body2'>Members</Typography>
-                </ListItemText>
-              </ListItem>
-              
-              <ListItem sx={{padding:'0px', textAlign:'center', margin: '5px 0'}}>
-                <ListItemAvatar>
-                    <Avatar></Avatar>
-                </ListItemAvatar>
-                <ListItemText>
-                  <Typography variant='body2'>Members</Typography>
-                </ListItemText>
-              </ListItem>
-              
-              <ListItem sx={{padding:'0px', textAlign:'center', margin: '5px 0'}}>
-                <ListItemAvatar>
-                    <Avatar></Avatar>
-                </ListItemAvatar>
-                <ListItemText>
-                  <Typography variant='body2'>Members</Typography>
-                </ListItemText>
-              </ListItem>
-              
-            </List>
-          </Container>
+            { <MessageInformation /> }
         </Grid> 
       </Grid>
       <AddMemberModal/>
     </Box>
   )
+
 }
+
+const MessageInformation = () => {
+  const { handleOpenMember } = useContext(modalCreateContext)
+  return(
+    <Container sx={{padding: '8px 0'}}>
+    <Box sx={{display:'flex', justifyContent: 'space-between', alignItems:'center'}}>
+        <Typography variant='subtitle1' gutterBottom fontWeight={'bold'} margin={'0px'} lineHeight={'0px'}>Members</Typography>
+        <Button onClick={(e) => handleOpenMember()}><AddIcon /></Button>
+    </Box>
+    <hr/>
+    <List sx={{padding: '0px'}}>
+      <ListItem sx={{padding:'0px', textAlign:'center', margin: '5px 0'}}>
+        <ListItemAvatar>
+            <Avatar></Avatar>
+        </ListItemAvatar>
+        <ListItemText>
+          <Typography variant='body2'>Members</Typography>
+        </ListItemText>
+      </ListItem>
+
+    </List>
+    </Container>
+  )
+}
+
 
 
 export default MsgContainer

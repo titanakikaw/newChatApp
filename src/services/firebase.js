@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
-import { addDoc, collection, getFirestore, onSnapshot, serverTimestamp, query, orderBy} from 'firebase/firestore'
+import { addDoc, collection, getFirestore, onSnapshot, serverTimestamp, query, orderBy, getDocs, where, getDoc, getDocsFromCache} from 'firebase/firestore'
 import { initializeApp } from 'firebase/app'
 
 const firebaseConfig = {
@@ -27,16 +27,13 @@ async function loginWithGoogle() {
    }
 }
 
-async function createGroup(groupName){
+async function createGroup(groupName, members){
    try {
       const docRef = await addDoc(collection(db, 'groups'), {
          createAt : serverTimestamp(),
          lastUpdate : serverTimestamp(),
          name : groupName,
-         member : {
-            0 : "tn9UpCBae5ZnisVlLcWsEE3pDxD2"        
-         },
-         messageId : '223456'
+         members : members,
       })
    } catch (error) {
       console.log(error)
@@ -68,11 +65,10 @@ async function getMessages(roomId, callback){
    )
 }
 
-async function getGroups(callback){
+async function getGroups(uid,callback){
    return  onSnapshot(
       query(
-         collection(db, 'groups'),
-         orderBy('lastUpdate', 'desc')
+         collection(db, 'groups'),where("members", "array-contains", uid),
       ),
       (querySnapshot) => {
          const groups = querySnapshot.docs.map((doc) => ({
@@ -113,8 +109,36 @@ async function signInWithCredentials(email, password){
 
 }
 
+async function getUsers(){
+   const { docs } = await getDocs(collection(db, 'users'))
+   const users = docs.map((doc) => ({
+      id : doc.id,
+      ...doc.data()
+   }))
+   return users
+}
 
-export { loginWithGoogle, getGroups,  createGroup, sendMessage, getMessages, createUser, signInWithCredentials }
+async function getRoom(roomId, callback){
+   
+   const { docs } = await getDocs(collection(db, "groups"),where("name", "===", "test"));
+   const data = docs.map((doc) => ({
+      id : doc.id,
+      ...doc.data()
+   }))
+   callback(data)
+   
+}
+
+async function addUser(params){
+   try {
+      const docRef = await addDoc(collection(db, 'users'), params)
+   } catch (error) {
+      console.log(error)
+   }
+}
+
+
+export { loginWithGoogle, getGroups,  createGroup, sendMessage, getMessages, createUser, signInWithCredentials, addUser, getUsers, getRoom }
 
 
 

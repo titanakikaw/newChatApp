@@ -8,7 +8,6 @@ function Send(text, roomid, user){
       sentBy : user,
       sentAt : serverTimestamp()
    }
-
    if(message.text != ''){
       sendMessage(roomid, message)
    }

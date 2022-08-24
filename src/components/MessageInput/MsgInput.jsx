@@ -8,7 +8,7 @@ const MsgInput = () => {
    const { roomId }= useParams();
    const Text = useRef();
    const handleSend = () => {
-      Send(Text.current.value, roomId ,user.user.displayName)
+      Send(Text.current.value, roomId ,user.displayName)
    }
    return (
          <Box sx={{padding: '1rem'}}>
