@@ -3,6 +3,7 @@ import { Modal, Box, Typography, TextField, Button } from '@mui/material'
 import { modalCreateContext } from '../../Authenticated/Authenticated';
 import { createGroup } from '../../../services/firebase';
 import { AuthContext } from '../../../context/auth'
+import EmailIcon from '@mui/icons-material/Email';
 
 const style = {
    position: 'absolute',
@@ -14,7 +15,7 @@ const style = {
    border: '1px solid #f3f3f3',
    boxShadow: 24,
    borderRadius: '5px',
-   p: 1,
+   p: 2,
 };
 
 const Index = () => {
@@ -37,13 +38,13 @@ const Index = () => {
             >
                <Box sx={style}>
                   <Typography id="modal-modal-title" variant="h6" >
-                     Create New Group
+                     New Room
                   </Typography>
                   <div className='input-create' style={{margin:'10px 0'}}>
                      <input type="text" className="modalTextField" style={{padding:'10px', width:'100%'}} onChange={(e) => handleChange(e)} />
                   </div>
                   <div className='input-create'>
-                     <Button variant="contained" color="success" onClick={() => createGroup(name, [user.uid])}>Create</Button>
+                     <Button variant="contained" color="success" onClick={() => createGroup(name, [user.uid])}> <EmailIcon/> Create</Button>
                      <Button variant="contained" sx={{marginLeft:'10px'}} onClick={() => handleCloseModal(name)}>Cancel</Button>
                   </div>
                </Box>

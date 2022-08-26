@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
-import { addDoc, collection, getFirestore, onSnapshot, serverTimestamp, query, orderBy, getDocs, where, getDoc, getDocsFromCache} from 'firebase/firestore'
+import { addDoc, collection, getFirestore, onSnapshot, serverTimestamp, query, orderBy, getDocs, where, getDoc, doc, updateDoc} from 'firebase/firestore'
 import { initializeApp } from 'firebase/app'
 
 const firebaseConfig = {
@@ -41,7 +41,6 @@ async function createGroup(groupName, members){
 }
 
 async function sendMessage(groupId, data){
-
    try{
       await addDoc(collection(db, 'messages', groupId, 'message'), data)
    }catch(error){
@@ -120,12 +119,15 @@ async function getUsers(){
 
 async function getRoom(roomId, callback){
    
-   const { docs } = await getDocs(collection(db, "groups"),where("name", "===", "test"));
-   const data = docs.map((doc) => ({
-      id : doc.id,
-      ...doc.data()
-   }))
-   callback(data)
+   const docRef = doc(db, "groups", roomId);
+   const docSnap = await getDoc(docRef);
+
+   if(docSnap.exists()){
+      callback(docSnap.data())
+    
+   }else{
+      console.log("error")
+   }
    
 }
 
@@ -137,8 +139,28 @@ async function addUser(params){
    }
 }
 
+async function addMemberRoom(roomId, memberId){
+   const docRef = doc(db, 'groups', roomId);
+   const docSnap = await updateDoc(docRef, {
+      members : memberId
+   }) 
+}
 
-export { loginWithGoogle, getGroups,  createGroup, sendMessage, getMessages, createUser, signInWithCredentials, addUser, getUsers, getRoom }
+async function lastUpdate1(roomId, latestMsg){
+   const docRef = doc(db, 'groups', roomId);
+   try {
+      const docSnap = await updateDoc(docRef, {
+         lastUpdate: serverTimestamp(),
+         latestMsg
+      })
+   } catch (error) {
+      console.log(error)
+   }
+ 
+}
+
+
+export { loginWithGoogle, getGroups,  createGroup, sendMessage, getMessages, createUser, signInWithCredentials, addUser, getUsers, getRoom, addMemberRoom, lastUpdate1 }
 
 
 
